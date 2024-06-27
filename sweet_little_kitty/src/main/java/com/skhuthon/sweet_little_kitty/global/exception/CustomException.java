@@ -1,6 +1,6 @@
-package com.skhuthon.sweet_little_kitty.global.error;
+package com.skhuthon.sweet_little_kitty.global.exception;
 
-import com.skhuthon.sweet_little_kitty.global.error.enumType.ErrorCode;
+import com.skhuthon.sweet_little_kitty.global.exception.code.ErrorCode;
 import lombok.Getter;
 
 @Getter

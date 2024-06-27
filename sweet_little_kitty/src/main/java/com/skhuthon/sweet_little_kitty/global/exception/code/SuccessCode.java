@@ -1,4 +1,4 @@
-package com.skhuthon.sweet_little_kitty.global.error.enumType;
+package com.skhuthon.sweet_little_kitty.global.exception.code;
 
 import lombok.AccessLevel;
 import lombok.Getter;
