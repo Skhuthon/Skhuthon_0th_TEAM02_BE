@@ -10,13 +10,11 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI openAPI() {
-
         Info info = new Info()
                 .title("Sweet Little Kitty API")
                 .description("Sweet Little Kitty API 명세서")
                 .version("v1.0.0");
 
-        return new OpenAPI()
-                .info(info);
+        return new OpenAPI().info(info);
     }
 }

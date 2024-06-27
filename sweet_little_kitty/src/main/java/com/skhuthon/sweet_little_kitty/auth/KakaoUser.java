@@ -1,12 +1,6 @@
 package com.skhuthon.sweet_little_kitty.auth;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-
 public class KakaoUser {
-
-    @Id
-    @GeneratedValue
     private Long id;
     private String nickname;
     private String email;
@@ -28,5 +22,4 @@ public class KakaoUser {
     public String getEmail() {
         return email;
     }
-
 }

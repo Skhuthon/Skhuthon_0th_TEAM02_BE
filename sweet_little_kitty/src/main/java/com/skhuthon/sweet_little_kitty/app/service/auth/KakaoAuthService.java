@@ -1,13 +1,22 @@
-package com.skhuthon.sweet_little_kitty.auth;
+package com.skhuthon.sweet_little_kitty.app.service.auth;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.skhuthon.sweet_little_kitty.app.entity.user.User;
+import com.skhuthon.sweet_little_kitty.app.repository.UserRepository;
+import com.skhuthon.sweet_little_kitty.global.exception.code.ErrorCode;
+import com.skhuthon.sweet_little_kitty.global.exception.code.SuccessCode;
+import com.skhuthon.sweet_little_kitty.global.template.ApiResponseTemplate;
+import com.skhuthon.sweet_little_kitty.auth.KakaoUser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class KakaoAuthService {
@@ -18,7 +27,10 @@ public class KakaoAuthService {
     @Value("${kakao.redirect-uri}")
     private String redirectUri;
 
-    public KakaoUser kakaoLogin(String code) {
+    @Autowired
+    private UserRepository userRepository;
+
+    public ApiResponseTemplate<KakaoLoginResponseDto> kakaoLogin(String code) {
         try {
             RestTemplate restTemplate = new RestTemplate();
             String tokenUrl = "https://kauth.kakao.com/oauth/token";
@@ -64,9 +76,29 @@ public class KakaoAuthService {
             String nickname = kakaoAccount.get("profile").get("nickname").asText();
             String email = kakaoAccount.get("email").asText();
 
-            return new KakaoUser(id, nickname, email);
+            KakaoUser kakaoUser = new KakaoUser(id, nickname, email);
+            saveOrUpdateUser(kakaoUser);
+
+            KakaoLoginResponseDto responseDto = new KakaoLoginResponseDto(email);
+            return ApiResponseTemplate.success(SuccessCode.LOGIN_USER_SUCCESS, responseDto);
         } catch (Exception e) {
-            throw new RuntimeException("카카오 로그인 실패", e);
+            return ApiResponseTemplate.error(ErrorCode.VALIDATION_REQUEST_FAIL_USERINFO_EXCEPTION, "카카오 로그인 실패");
         }
+    }
+
+    private void saveOrUpdateUser(KakaoUser kakaoUser) {
+        Optional<User> userOptional = userRepository.findByEmail(kakaoUser.getEmail());
+        User user;
+        if (userOptional.isPresent()) {
+            user = userOptional.get();
+            user.update(kakaoUser.getNickname());
+        } else {
+            user = User.builder()
+                    .name(kakaoUser.getNickname())
+                    .email(kakaoUser.getEmail())
+                    .build();
+        }
+
+        userRepository.save(user);
     }
 }
