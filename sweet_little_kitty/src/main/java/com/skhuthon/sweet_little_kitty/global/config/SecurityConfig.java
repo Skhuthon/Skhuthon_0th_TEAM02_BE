@@ -29,6 +29,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter();
 
         http
@@ -61,4 +62,10 @@ public class SecurityConfig {
 
         return source;
     }
+
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return webSecurity -> webSecurity.ignoring()
+//                .requestMatchers("/docs/**", "/api-docs/**", "/swagger-ui/**", "/favicon.ico");
+//    }
 }
