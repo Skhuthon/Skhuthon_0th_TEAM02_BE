@@ -75,6 +75,24 @@ public class DiaryServiceImpl implements DiaryService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
+    public ApiResponseTemplate<Void> deleteDiary(String userEmail, Long diaryId) {
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, "해당 일기를 찾을 수 없습니다: " + diaryId));
+
+        if (!diary.getUser().getEmail().equals(userEmail)) {
+            throw new CustomException(ErrorCode.ONLY_OWN_DIARY_MODIFY_EXCEPTION, "본인이 작성한 일기만 삭제 가능합니다.");
+        }
+
+        diaryRepository.delete(diary);
+
+        return ApiResponseTemplate.<Void>builder()
+                .status(204)
+                .success(true)
+                .message("일기 삭제 성공")
+                .build();
+    }
+
     private List<GetS3Resource> uploadImages(List<MultipartFile> files, String directory) {
         return s3ImageFileService.uploadImageFiles(files, directory);
     }

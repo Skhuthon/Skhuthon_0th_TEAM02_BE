@@ -10,12 +10,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.security.Principal;
 
 @RestController
@@ -38,11 +34,33 @@ public class DiaryController {
     )
     public ResponseEntity<ApiResponseTemplate<DiaryRegisterResDto>> registerDiary(
             @RequestPart("diary") DiaryRegisterReqDto reqDto,
-            Principal principal) throws IOException {
+            Principal principal) {
 
         ApiResponseTemplate<DiaryRegisterResDto> data = diaryService.registerDiary(principal.getName(), reqDto);
 
         return ResponseEntity.status(data.getStatus()).body(data);
+    }
 
+    @DeleteMapping("/{diaryId}")
+    @Operation(
+            summary = "특정 여행 일기 삭제",
+            description = "특정 여행 일기를 삭제합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "특정 여행 일기 삭제 성공"),
+                    @ApiResponse(responseCode = "404", description = "일기를 찾을 수 없음"),
+                    @ApiResponse(responseCode = "500", description = "토큰 문제 or 관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate<Void>> deleteDiary(
+            @PathVariable Long diaryId,
+            Principal principal) {
+        diaryService.deleteDiary(principal.getName(), diaryId);
+
+        ApiResponseTemplate<Void> data = ApiResponseTemplate.<Void>builder()
+                .status(204)
+                .success(true)
+                .message("특정 여행 일기 삭제 성공")
+                .build();
+        return ResponseEntity.status(data.getStatus()).body(data);
     }
 }
