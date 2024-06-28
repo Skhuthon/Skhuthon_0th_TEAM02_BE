@@ -30,22 +30,22 @@ public class DiaryServiceImpl implements DiaryService {
     private final RegionRepository regionRepository;
     private final S3ImageFileService s3ImageFileService;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public ApiResponseTemplate<DiaryRegisterResDto> registerDiary(
             String userEmail,
             DiaryRegisterReqDto reqDto) {
 
         User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER_EXCEPTION, "User not found with email: " + userEmail));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER_EXCEPTION, "해당 이메일을 가진 사용자를 찾을 수 없습니다: " + userEmail));
 
         Region region = regionRepository.findByCategory(reqDto.region())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_REGION_EXCEPTION, "Region not found with category: " + reqDto.region()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_REGION_EXCEPTION, "해당 지역을 찾을 수 없습니다: " + reqDto.region()));
 
         List<GetS3Resource> imageUrls;
         try {
             imageUrls = uploadImages(reqDto.images(), "diary");
         } catch (Exception e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("이미지 업로드에 실패하였습니다", e);
         }
 
         Diary diary = Diary.builder()
