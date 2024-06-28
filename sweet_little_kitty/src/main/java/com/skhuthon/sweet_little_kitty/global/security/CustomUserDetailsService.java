@@ -1,7 +1,7 @@
 package com.skhuthon.sweet_little_kitty.global.security;
 
 import com.skhuthon.sweet_little_kitty.app.entity.user.User;
-import com.skhuthon.sweet_little_kitty.app.repository.UserRepository;
+import com.skhuthon.sweet_little_kitty.app.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -3,7 +3,7 @@ package com.skhuthon.sweet_little_kitty.app.service.auth;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skhuthon.sweet_little_kitty.app.entity.user.User;
-import com.skhuthon.sweet_little_kitty.app.repository.UserRepository;
+import com.skhuthon.sweet_little_kitty.app.repository.user.UserRepository;
 import com.skhuthon.sweet_little_kitty.global.exception.code.ErrorCode;
 import com.skhuthon.sweet_little_kitty.global.exception.code.SuccessCode;
 import com.skhuthon.sweet_little_kitty.global.template.ApiResponseTemplate;

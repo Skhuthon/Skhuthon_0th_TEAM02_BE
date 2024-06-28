@@ -57,12 +57,12 @@ public class Diary {
     private Region region;
 
     @Builder
-    private Diary(String title, String content, List<String> imageUrls, Visibility visibility, User user, Region region) {
+    private Diary(String title, String content, Visibility visibility, User user, Region region, List<String> imageUrls) {
         this.title = title;
         this.content = content;
-        this.imageUrls = imageUrls;
         this.visibility = visibility;
         this.user = user;
         this.region = region;
+        this.imageUrls = imageUrls;
     }
 }
