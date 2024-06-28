@@ -2,17 +2,17 @@ package com.skhuthon.sweet_little_kitty.app.entity.user;
 
 import com.skhuthon.sweet_little_kitty.app.entity.diary.Diary;
 import com.skhuthon.sweet_little_kitty.app.entity.friend.Friend;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.ArrayList;
 
 @Entity
 @Getter
