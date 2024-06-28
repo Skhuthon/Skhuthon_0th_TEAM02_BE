@@ -31,6 +31,7 @@ public class SwaggerConfig {
                 .description("Sweet Little Kitty API 명세서")
                 .version("v1.0.0");
 
+
         return new OpenAPI()
                 .info(info)
                 .servers(List.of(devServer, prodServer));
