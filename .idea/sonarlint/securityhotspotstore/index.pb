@@ -15,8 +15,6 @@ msweet_little_kitty/src/main/java/com/skhuthon/sweet_little_kitty/global/securit
 fsweet_little_kitty/src/main/java/com/skhuthon/sweet_little_kitty/global/security/JwtTokenProvider.java,1\1\1140573dd28748c41dbc95324e4b1d0b4221cb78
 ˜
 hsweet_little_kitty/src/main/java/com/skhuthon/sweet_little_kitty/app/controller/auth/AuthController.java,3\9\39381689b0ccfbd7eccdcaacedb9b1f8149cdaf5
-“
-csweet_little_kitty/src/main/java/com/skhuthon/sweet_little_kitty/app/repository/UserRepository.java,f\d\fddcf8d9f9e05ad67fbc9e8016528f8555f43f22
 —
 gsweet_little_kitty/src/main/java/com/skhuthon/sweet_little_kitty/app/service/auth/KakaoAuthService.java,c\5\c522f6b22af2381e85e9e2e0001c062a8a91b077
 Š
@@ -89,14 +87,10 @@ jsweet_little_kitty/src/main/java/com/skhuthon/sweet_little_kitty/app/dto/user/r
 osweet_little_kitty/src/main/java/com/skhuthon/sweet_little_kitty/app/dto/diary/request/DiaryRegisterReqDto.java,e\f\efa70c7993e91581ca03875146d11ee6e9f8ed2f
 Œ
 \sweet_little_kitty/src/main/java/com/skhuthon/sweet_little_kitty/app/dto/diary/DiaryDto.java,7\b\7bdccff7b51e7cfa1a4a3bf74436278a70b9bf89
-¡
-qsweet_little_kitty/src/main/java/com/skhuthon/sweet_little_kitty/app/controller/diary/FriendsDiaryController.java,1\4\14f276da34ca1de990c853394939adf52f49d47a
 £
 ssweet_little_kitty/src/main/java/com/skhuthon/sweet_little_kitty/app/service/diary/friends/FriendsDiaryService.java,d\a\da7b9cc30568d93728751a223335b0e548d2dbc0
 §
 wsweet_little_kitty/src/main/java/com/skhuthon/sweet_little_kitty/app/service/diary/friends/FriendsDiaryServiceImpl.java,9\8\982d545beb8e5b3021fec62d608c4cadcb43ef84
-©
-ysweet_little_kitty/src/main/java/com/skhuthon/sweet_little_kitty/app/repository/diary/friends/FriendsDiaryRepository.java,8\f\8f54becbb719ad12746c9b08b7a6346b4bae76b1
 ©
 ysweet_little_kitty/src/main/java/com/skhuthon/sweet_little_kitty/app/controller/diary/Friends/FriendsDiaryController.java,7\8\78eda046a98bf0a093814598dfa411ae53ce669d
 Ž
