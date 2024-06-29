@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface FriendRepository extends JpaRepository<Friend, Long> {
     List<Friend> findByUser(User user);
-    void deleteByFriendIdAndUserUserId(Long id, Long userId);
+    void deleteByFriendIdAndUserUserId(Long id, Authentication authentication);
     boolean existsByUserAndFriendName(Authentication authentication, String friendName);
 }

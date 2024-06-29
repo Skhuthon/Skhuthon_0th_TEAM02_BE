@@ -63,14 +63,13 @@ public class FriendServiceImpl implements FriendService {
         return ApiResponseTemplate.success(SuccessCode.GET_FRIENDS_SUCCESS, friendResponseDtos);
     }
 
-    @Override
     @Transactional
-    public ApiResponseTemplate<Void> deleteFriend(Long id, Long userId) {
+    public ApiResponseTemplate<Void> deleteFriend(Long id, Authentication authentication) {
         if (!friendRepository.existsById(id)) {
             throw new CustomException(ErrorCode.NOT_FOUND_ID_EXCEPTION, "Friend not found");
         }
 
-        friendRepository.deleteByFriendIdAndUserUserId(id, userId);
+        friendRepository.deleteByFriendIdAndUserUserId(id, authentication);
         return ApiResponseTemplate.success(SuccessCode.DELETE_FRIEND_SUCCESS, null);
     }
 }

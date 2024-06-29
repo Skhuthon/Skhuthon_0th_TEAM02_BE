@@ -9,5 +9,5 @@ import java.util.List;
 public interface FriendService {
     ApiResponseTemplate<Void> addFriend(String friendEmail, Authentication authentication);
     ApiResponseTemplate<List<FriendResponseDto>> listFriends(Authentication authentication);
-    ApiResponseTemplate<Void> deleteFriend(Long id, Long userId);
+    ApiResponseTemplate<Void> deleteFriend(Long id, Authentication authentication);
 }

@@ -51,8 +51,7 @@ public class FriendController {
     })
     public ResponseEntity<ApiResponseTemplate<Void>> deleteFriend(@RequestParam Long friendId, Authentication authentication) {
 
-        Long userId = Long.valueOf(authentication.getName());
-        ApiResponseTemplate<Void> data = friendService.deleteFriend(friendId, userId);
+        ApiResponseTemplate<Void> data = friendService.deleteFriend(friendId, authentication);
 
         return ResponseEntity.status(data.getStatus()).body(data);
     }
