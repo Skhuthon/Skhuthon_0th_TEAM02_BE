@@ -1,5 +1,0 @@
-
-Q
-java:S22011"/The return value of "orElseThrow" must be used.(÷ÿ¶ïøÿÿÿÿ8ÃÏ£€†2
-o
-java:S62046"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(ª™¨¹8Û½–™†2
