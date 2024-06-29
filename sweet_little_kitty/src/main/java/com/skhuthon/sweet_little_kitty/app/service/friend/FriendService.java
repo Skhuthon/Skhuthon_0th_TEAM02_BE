@@ -7,7 +7,7 @@ import com.skhuthon.sweet_little_kitty.global.template.ApiResponseTemplate;
 import java.util.List;
 
 public interface FriendService {
-    ApiResponseTemplate<Void> addFriend(FriendRequestDto friendRequestDto, Long userId);
+    ApiResponseTemplate<FriendResponseDto> addFriend(FriendRequestDto friendRequestDto, Long userId);
     ApiResponseTemplate<List<FriendResponseDto>> listFriends(Long userId);
     ApiResponseTemplate<Void> deleteFriend(Long id, Long userId);
 }

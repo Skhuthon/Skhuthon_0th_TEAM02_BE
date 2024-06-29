@@ -99,3 +99,7 @@ ysweet_little_kitty/src/main/java/com/skhuthon/sweet_little_kitty/app/controller
 fsweet_little_kitty/src/main/java/com/skhuthon/sweet_little_kitty/app/entity/region/RegionCategory.java,1\7\1764a89f9a1442d8e798db6e89bd9c5cf380218c
 ©
 ysweet_little_kitty/src/main/java/com/skhuthon/sweet_little_kitty/app/controller/diary/friends/FriendsDiaryController.java,7\e\7eed98a9c3a104cf2e99471063838bda5ae0e22f
+œ
+lsweet_little_kitty/src/main/java/com/skhuthon/sweet_little_kitty/app/controller/user/UserInfoController.java,4\6\46e4f8afa4849c02d4aadddcc26b927c394f77d4
+ 
+psweet_little_kitty/src/main/java/com/skhuthon/sweet_little_kitty/app/dto/diary/response/DiaryRegisterResDto.java,6\d\6d5c3a9fe6d0a4b0b7e0c59d661399f9abf4d304
