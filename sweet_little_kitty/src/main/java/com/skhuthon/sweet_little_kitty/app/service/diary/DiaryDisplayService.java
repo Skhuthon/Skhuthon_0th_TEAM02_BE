@@ -9,6 +9,6 @@ import java.util.List;
 public interface DiaryDisplayService {
 
     ApiResponseTemplate<List<DiaryDto>> getAllDiaries(Authentication authentication);
-    ApiResponseTemplate<List<DiaryDto>> getDiariesByRegion(String region);
+    ApiResponseTemplate<List<DiaryDto>> getDiariesByRegion(String region, Authentication authentication);
     ApiResponseTemplate<DiaryDto> getDiaryById(Long diaryId);
 }

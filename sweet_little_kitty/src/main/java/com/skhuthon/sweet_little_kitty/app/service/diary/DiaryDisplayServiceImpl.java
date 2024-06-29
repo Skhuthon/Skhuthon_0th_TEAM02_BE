@@ -40,8 +40,9 @@ public class DiaryDisplayServiceImpl implements DiaryDisplayService {
     }
 
     @Transactional(readOnly = true)
-    public ApiResponseTemplate<List<DiaryDto>> getDiariesByRegion(String region) {
+    public ApiResponseTemplate<List<DiaryDto>> getDiariesByRegion(String region, Authentication authentication) {
         RegionCategory regionCategory = RegionCategory.convertToCategory(region);
+
         List<Diary> diaries = regionRepository.findByCategory(regionCategory)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, "해당 지역의 일기를 찾을 수 없습니다: " + regionCategory))
                 .getDiaries();

@@ -11,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -48,7 +45,7 @@ public class DiaryDisplayController {
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
-    @GetMapping("/{region}")
+    @GetMapping("/region")
     @Operation(
             summary = "지역별 여행 일기 조회",
             description = "특정 지역의 여행 일기를 조회합니다.",
@@ -58,8 +55,8 @@ public class DiaryDisplayController {
                     @ApiResponse(responseCode = "500", description = "토큰 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<List<DiaryDto>>> getDiariesByRegion(@PathVariable String region) {
-        List<DiaryDto> diaries = diaryDisplayService.getDiariesByRegion(region).getData();
+    public ResponseEntity<ApiResponseTemplate<List<DiaryDto>>> getDiariesByRegion(@RequestParam String region, Authentication authentication) {
+        List<DiaryDto> diaries = diaryDisplayService.getDiariesByRegion(region, authentication).getData();
         ApiResponseTemplate<List<DiaryDto>> data = ApiResponseTemplate.<List<DiaryDto>>builder()
                 .status(200)
                 .success(true)
