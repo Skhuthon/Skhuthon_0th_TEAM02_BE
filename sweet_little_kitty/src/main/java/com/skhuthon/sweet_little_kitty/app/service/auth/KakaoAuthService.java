@@ -12,10 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -33,18 +34,19 @@ public class KakaoAuthService {
     public ApiResponseTemplate<KakaoLoginResponseDto> kakaoLogin(String code) {
         try {
             RestTemplate restTemplate = new RestTemplate();
+
             String tokenUrl = "https://kauth.kakao.com/oauth/token";
             String userInfoUrl = "https://kapi.kakao.com/v2/user/me";
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-            Map<String, String> params = new HashMap<>();
-            params.put("grant_type", "authorization_code");
-            params.put("client_id", clientId);
-            params.put("redirect_uri", redirectUri);
-            params.put("code", code);
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+            params.add("grant_type", "authorization_code");
+            params.add("client_id", clientId);
+            params.add("redirect_uri", redirectUri);
+            params.add("code", code);
 
-            HttpEntity<Map<String, String>> request = new HttpEntity<>(params, headers);
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 
             ResponseEntity<String> tokenResponse = restTemplate.exchange(
                     tokenUrl,
@@ -52,6 +54,10 @@ public class KakaoAuthService {
                     request,
                     String.class
             );
+
+            if (tokenResponse.getStatusCode() != HttpStatus.OK) {
+                throw new RuntimeException("액세스 토큰을 가져오는데 실패했습니다.");
+            }
 
             ObjectMapper mapper = new ObjectMapper();
             JsonNode tokenJson = mapper.readTree(tokenResponse.getBody());
@@ -69,6 +75,10 @@ public class KakaoAuthService {
                     String.class
             );
 
+            if (userInfoResponse.getStatusCode() != HttpStatus.OK) {
+                throw new RuntimeException("사용자 정보를 가져오는데 실패했습니다.");
+            }
+
             JsonNode userJson = mapper.readTree(userInfoResponse.getBody());
             JsonNode kakaoAccount = userJson.get("kakao_account");
 
@@ -81,7 +91,11 @@ public class KakaoAuthService {
 
             KakaoLoginResponseDto responseDto = new KakaoLoginResponseDto(email);
             return ApiResponseTemplate.success(SuccessCode.LOGIN_USER_SUCCESS, responseDto);
+        } catch (HttpClientErrorException.BadRequest badRequest) {
+            String responseBody = badRequest.getResponseBodyAsString();
+            return ApiResponseTemplate.error(ErrorCode.AUTHENTICATION_FAILED_EXCEPTION, responseBody);
         } catch (Exception e) {
+            e.printStackTrace();
             return ApiResponseTemplate.error(ErrorCode.VALIDATION_REQUEST_FAIL_USERINFO_EXCEPTION, "카카오 로그인 실패");
         }
     }
