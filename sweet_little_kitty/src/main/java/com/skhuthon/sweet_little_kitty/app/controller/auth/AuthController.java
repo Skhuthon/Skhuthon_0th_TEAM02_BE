@@ -34,9 +34,11 @@ public class AuthController {
         if (data.isSuccess()) {
             String email = data.getData().getEmail();
             String jwtToken = jwtTokenProvider.generateToken(email);
-            return ResponseEntity.ok(ApiResponseTemplate.success(SuccessCode.LOGIN_USER_SUCCESS, jwtToken));
+            ApiResponseTemplate<String> response = ApiResponseTemplate.success(SuccessCode.LOGIN_USER_SUCCESS, jwtToken);
+            return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.status(data.getStatus()).body(ApiResponseTemplate.error(data.getErrorCode(), data.getMessage()));
+            ApiResponseTemplate<String> response = ApiResponseTemplate.error(data.getErrorCode(), data.getMessage());
+            return ResponseEntity.status(data.getStatus()).body(response);
         }
     }
 }
