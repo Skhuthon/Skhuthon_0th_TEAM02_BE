@@ -60,9 +60,10 @@ public class DiaryDisplayServiceImpl implements DiaryDisplayService {
     }
 
     @Transactional(readOnly = true)
-    public ApiResponseTemplate<DiaryDto> getDiaryById(Long diaryId) {
+    public ApiResponseTemplate<DiaryDto> getDiaryById(Long diaryId, Authentication authentication) {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, "일기를 찾을 수 없습니다: " + diaryId));
+
         DiaryDto diaryDto = convertToDto(diary);
 
         return ApiResponseTemplate.<DiaryDto>builder()

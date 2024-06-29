@@ -66,7 +66,7 @@ public class DiaryDisplayController {
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
-    @GetMapping("/{diaryId}")
+    @GetMapping("/detail")
     @Operation(
             summary = "특정 여행 일기 조회",
             description = "특정 여행 일기를 조회합니다.",
@@ -76,8 +76,8 @@ public class DiaryDisplayController {
                     @ApiResponse(responseCode = "500", description = "토큰 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<DiaryDto>> getDiaryById(@PathVariable Long diaryId) {
-        DiaryDto diary = diaryDisplayService.getDiaryById(diaryId).getData();
+    public ResponseEntity<ApiResponseTemplate<DiaryDto>> getDiaryById(@RequestParam Long diaryId, Authentication authentication) {
+        DiaryDto diary = diaryDisplayService.getDiaryById(diaryId, authentication).getData();
         ApiResponseTemplate<DiaryDto> data = ApiResponseTemplate.<DiaryDto>builder()
                 .status(200)
                 .success(true)
