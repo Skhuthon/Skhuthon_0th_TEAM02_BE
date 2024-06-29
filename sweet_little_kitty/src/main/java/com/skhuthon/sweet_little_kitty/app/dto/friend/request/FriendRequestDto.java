@@ -1,10 +1,12 @@
 package com.skhuthon.sweet_little_kitty.app.dto.friend.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class FriendRequestDto {
     private String email;
 }
