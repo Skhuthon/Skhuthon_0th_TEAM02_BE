@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Principal;
-
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserInfoService {
@@ -20,12 +18,10 @@ public class UserInfoService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public ApiResponseTemplate<UserInfoResDto> getUserInfo(Principal principal) {
-        Long userId = Long.parseLong(principal.getName());
-
-        User user = userRepository.findById(userId)
+    public ApiResponseTemplate<UserInfoResDto> getUserInfo(String userName) {
+        User user = userRepository.findByEmail(userName)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ID_EXCEPTION,
-                        "사용자 : " + ErrorCode.NOT_FOUND_ID_EXCEPTION.getMessage()));
+                        "사용자를 찾을 수 없습니다."));
 
         UserInfoResDto resDto = UserInfoResDto.builder()
                 .name(user.getName())

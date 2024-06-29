@@ -9,11 +9,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,9 +32,9 @@ public class UserInfoController {
                     @ApiResponse(responseCode = "404", description = "사용자 정보를 찾을 수 없음"),
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             })
-    public ResponseEntity<ApiResponseTemplate<UserInfoResDto>> getUserDetails(Principal principal) {
-        ApiResponseTemplate<UserInfoResDto> data = userInfoService.getUserInfo(principal);
-
+    public ResponseEntity<ApiResponseTemplate<UserInfoResDto>> getUserDetails(Authentication authentication) {
+        String userName = authentication.getName();
+        ApiResponseTemplate<UserInfoResDto> data = userInfoService.getUserInfo(userName);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 }
