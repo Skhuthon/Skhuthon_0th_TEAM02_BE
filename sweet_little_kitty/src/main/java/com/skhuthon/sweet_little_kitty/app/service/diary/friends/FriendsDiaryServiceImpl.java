@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,22 +52,22 @@ public class FriendsDiaryServiceImpl implements FriendsDiaryService {
         return ApiResponseTemplate.<List<DiaryDto>>builder()
                 .status(200)
                 .success(true)
-                .message("친구의 일기 조회 성공")
+                .message("특정 친구의 일기 조회 성공")
                 .data(diaryDtos)
                 .build();
     }
 
     @Transactional(readOnly = true)
     public ApiResponseTemplate<DiaryDto> getFriendDiaryDetails(Long friendId, Long diaryId, Authentication authentication) {
-        Diary diary = diaryRepository.findPublicDiaryByIdAndFriendId(diaryId, friendId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, "일기를 찾을 수 없습니다: " + diaryId));
+        Optional<Diary> optinalDiary = diaryRepository.findPublicDiaryByIdAndFriendId(diaryId, friendId);
+        Diary diary = optinalDiary.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, "일기를 찾을 수 없습니다: " + diaryId));
 
         DiaryDto diaryDto = convertToDto(diary);
 
         return ApiResponseTemplate.<DiaryDto>builder()
                 .status(200)
                 .success(true)
-                .message("친구의 일기 상세 조회 성공")
+                .message("특정 친구의 일기 상세 조회 성공")
                 .data(diaryDto)
                 .build();
     }

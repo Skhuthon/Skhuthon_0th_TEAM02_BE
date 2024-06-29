@@ -43,7 +43,7 @@ public class FriendsDiaryController {
     }
 
     @GetMapping("/search")
-    @Operation(summary = "친구의 일기 조회", description = "특정 친구의 공개된 일기를 조회합니다.", responses = {
+    @Operation(summary = "특정 친구의 일기 조회", description = "특정 친구의 공개된 일기를 조회합니다.", responses = {
             @ApiResponse(responseCode = "200", description = "일기 조회 성공"),
             @ApiResponse(responseCode = "404", description = "조회된 일기가 없음"),
             @ApiResponse(responseCode = "500", description = "토큰 문제 or 관리자 문의")
@@ -60,17 +60,17 @@ public class FriendsDiaryController {
     }
 
     @GetMapping("/search/detail")
-    @Operation(summary = "친구의 일기 상세 조회", description = "친구의 특정 일기를 상세 조회합니다.", responses = {
+    @Operation(summary = "특정 친구의 일기 상세 조회", description = "특정 친구의 일기를 상세 조회합니다.", responses = {
             @ApiResponse(responseCode = "200", description = "일기 상세 조회 성공"),
             @ApiResponse(responseCode = "404", description = "조회된 일기가 없음"),
             @ApiResponse(responseCode = "500", description = "토큰 문제 or 관리자 문의")
     })
-    public ResponseEntity<ApiResponseTemplate<DiaryDto>> getDiaryById(@RequestParam Long friendId, Long diaryId, Authentication authentication) {
+    public ResponseEntity<ApiResponseTemplate<DiaryDto>> getDiaryById(@RequestParam Long friendId, @RequestParam Long diaryId, Authentication authentication) {
         DiaryDto diary = friendsDiaryService.getFriendDiaryDetails(friendId, diaryId, authentication).getData();
         ApiResponseTemplate<DiaryDto> data = ApiResponseTemplate.<DiaryDto>builder()
                 .status(200)
                 .success(true)
-                .message("친구의 특정 일기 상세 조회 성공")
+                .message("특정 친구의 일기 상세 조회 성공")
                 .data(diary)
                 .build();
         return ResponseEntity.status(data.getStatus()).body(data);
