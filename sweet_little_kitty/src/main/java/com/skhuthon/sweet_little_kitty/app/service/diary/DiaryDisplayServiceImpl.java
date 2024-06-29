@@ -10,6 +10,7 @@ import com.skhuthon.sweet_little_kitty.global.exception.code.ErrorCode;
 import com.skhuthon.sweet_little_kitty.global.template.ApiResponseTemplate;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +25,7 @@ public class DiaryDisplayServiceImpl implements DiaryDisplayService {
     private final RegionRepository regionRepository;
 
     @Transactional(readOnly = true)
-    public ApiResponseTemplate<List<DiaryDto>> getAllDiaries() {
+    public ApiResponseTemplate<List<DiaryDto>> getAllDiaries(Authentication authentication) {
         List<Diary> diaries = diaryRepository.findAll();
         List<DiaryDto> diaryDtos = diaries.stream()
                 .map(this::convertToDto)
