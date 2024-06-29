@@ -10,28 +10,32 @@ import com.skhuthon.sweet_little_kitty.global.exception.CustomException;
 import com.skhuthon.sweet_little_kitty.global.exception.code.ErrorCode;
 import com.skhuthon.sweet_little_kitty.global.exception.code.SuccessCode;
 import com.skhuthon.sweet_little_kitty.global.template.ApiResponseTemplate;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class FriendServiceImplementation implements FriendService {
 
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
 
-    @Override
-    public ApiResponseTemplate<Void> addFriend(FriendRequestDto friendRequestDto, Long userId) {
+    @Transactional
+    public ApiResponseTemplate<FriendResponseDto> addFriend(FriendRequestDto friendRequestDto, Long userId) {
+
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER_EXCEPTION, "User not found"));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER_EXCEPTION, "해당 사용자를 찾을 수 없습니다" + userId));
+
         User friendUser = userRepository.findByEmail(friendRequestDto.getEmail())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER_EXCEPTION, "Friend not found"));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER_EXCEPTION, "해당 사용자를 찾을 수 없습니다" + friendRequestDto.getEmail()));
 
         if (friendRepository.existsByUserAndFriendName(user, friendUser.getName())) {
-            throw new CustomException(ErrorCode.ALREADY_EXIST_USER_EXCEPTION, "Friend already exists");
+            throw new CustomException(ErrorCode.ALREADY_EXIST_USER_EXCEPTION, "이미 친구인 사용자입니다.");
         }
 
         Friend friend = Friend.builder()
@@ -39,11 +43,26 @@ public class FriendServiceImplementation implements FriendService {
                 .areWeFriend(true)
                 .user(user)
                 .build();
+
         friendRepository.save(friend);
-        return ApiResponseTemplate.success(SuccessCode.ADD_FRIEND_SUCCESS, null);
+
+        FriendResponseDto resDto = FriendResponseDto.builder()
+                .friendId(friend.getFriendId())
+                .friendName(friend.getFriendName())
+                .email(friendUser.getEmail())
+                .areWeFriend(friend.isAreWeFriend())
+                .build();
+
+        return ApiResponseTemplate.<FriendResponseDto>builder()
+                .status(200)
+                .success(true)
+                .message("친구 추가 성공")
+                .data(resDto)
+                .build();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ApiResponseTemplate<List<FriendResponseDto>> listFriends(Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER_EXCEPTION, "User not found"));
@@ -56,6 +75,7 @@ public class FriendServiceImplementation implements FriendService {
     }
 
     @Override
+    @Transactional
     public ApiResponseTemplate<Void> deleteFriend(Long id, Long userId) {
         if (!friendRepository.existsById(id)) {
             throw new CustomException(ErrorCode.NOT_FOUND_ID_EXCEPTION, "Friend not found");

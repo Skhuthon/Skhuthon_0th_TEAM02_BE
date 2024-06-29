@@ -1,10 +1,12 @@
 package com.skhuthon.sweet_little_kitty.app.dto.friend.response;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 public class FriendResponseDto {
     private Long friendId;
     private String friendName;
