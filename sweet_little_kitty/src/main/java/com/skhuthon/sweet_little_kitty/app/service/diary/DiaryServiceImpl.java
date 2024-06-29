@@ -30,10 +30,8 @@ public class DiaryServiceImpl implements DiaryService {
     private final RegionRepository regionRepository;
     private final S3ImageFileService s3ImageFileService;
 
-    @Transactional(readOnly = true)
-    public ApiResponseTemplate<DiaryRegisterResDto> registerDiary(
-            String userEmail,
-            DiaryRegisterReqDto reqDto) {
+    @Transactional
+    public ApiResponseTemplate<DiaryRegisterResDto> registerDiary(String userEmail, DiaryRegisterReqDto reqDto, List<MultipartFile> images) {
 
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER_EXCEPTION, "해당 이메일을 가진 사용자를 찾을 수 없습니다: " + userEmail));
@@ -41,12 +39,7 @@ public class DiaryServiceImpl implements DiaryService {
         Region region = regionRepository.findByCategory(reqDto.region())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_REGION_EXCEPTION, "해당 지역을 찾을 수 없습니다: " + reqDto.region()));
 
-        List<GetS3Resource> imageUrls;
-        try {
-            imageUrls = uploadImages(reqDto.images(), "diary");
-        } catch (Exception e) {
-            throw new IllegalArgumentException("이미지 업로드에 실패하였습니다", e);
-        }
+        List<GetS3Resource> imageUrls = uploadImages(images, "diary");
 
         Diary diary = Diary.builder()
                 .title(reqDto.title())
@@ -75,8 +68,9 @@ public class DiaryServiceImpl implements DiaryService {
                 .build();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public ApiResponseTemplate<Void> deleteDiary(String userEmail, Long diaryId) {
+
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, "해당 일기를 찾을 수 없습니다: " + diaryId));
 
@@ -87,7 +81,7 @@ public class DiaryServiceImpl implements DiaryService {
         diaryRepository.delete(diary);
 
         return ApiResponseTemplate.<Void>builder()
-                .status(204)
+                .status(200)
                 .success(true)
                 .message("일기 삭제 성공")
                 .build();

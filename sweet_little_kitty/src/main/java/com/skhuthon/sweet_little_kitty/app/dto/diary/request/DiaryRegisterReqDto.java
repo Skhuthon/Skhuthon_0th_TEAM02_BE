@@ -10,7 +10,6 @@ public record DiaryRegisterReqDto(
         String title,
         String content,
         Visibility visibility,
-        RegionCategory region,
-        List<MultipartFile> images
+        RegionCategory region
 ) {
 }

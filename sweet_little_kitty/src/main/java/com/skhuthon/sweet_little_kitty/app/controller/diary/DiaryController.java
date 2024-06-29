@@ -9,10 +9,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,7 +25,7 @@ public class DiaryController {
 
     private final DiaryService diaryService;
 
-    @PostMapping("/register")
+    @PostMapping(value ="/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
             summary = "여행 일기 작성",
             description = "여행 일기를 작성합니다.",
@@ -33,15 +36,17 @@ public class DiaryController {
             }
     )
     public ResponseEntity<ApiResponseTemplate<DiaryRegisterResDto>> registerDiary(
-            @RequestPart("diary") DiaryRegisterReqDto reqDto,
-            Principal principal) {
+            @RequestPart("reqDto") DiaryRegisterReqDto reqDto,
+            @RequestPart("images") List<MultipartFile> images,
+            Authentication authentication) {
 
-        ApiResponseTemplate<DiaryRegisterResDto> data = diaryService.registerDiary(principal.getName(), reqDto);
+        String userName = authentication.getName();
+        ApiResponseTemplate<DiaryRegisterResDto> data = diaryService.registerDiary(userName, reqDto, images);
 
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
-    @DeleteMapping("/{diaryId}")
+    @DeleteMapping
     @Operation(
             summary = "특정 여행 일기 삭제",
             description = "특정 여행 일기를 삭제합니다.",
@@ -52,15 +57,12 @@ public class DiaryController {
             }
     )
     public ResponseEntity<ApiResponseTemplate<Void>> deleteDiary(
-            @PathVariable Long diaryId,
-            Principal principal) {
-        diaryService.deleteDiary(principal.getName(), diaryId);
+            @RequestParam Long diaryId,
+            Authentication authentication) {
 
-        ApiResponseTemplate<Void> data = ApiResponseTemplate.<Void>builder()
-                .status(204)
-                .success(true)
-                .message("특정 여행 일기 삭제 성공")
-                .build();
+        String userName = authentication.getName();
+        ApiResponseTemplate<Void> data = diaryService.deleteDiary(userName, diaryId);
+
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 }
